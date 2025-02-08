@@ -35,3 +35,9 @@ We are building a mobile web app using Next.js.
      (iii) from local files (`./...`)
    - Empty line inserted between sections
    - Within sections, the imports should be sorted
+
+## Design System
+
+We are using @channel.io/bezier-react v3, a React component library that implements Bezier design system.
+
+Refer to [Design System](./design-system.md) for more details.
