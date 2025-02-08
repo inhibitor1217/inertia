@@ -11,4 +11,9 @@
   display: flex;
   align-items: center;
   margin-right: auto;
+  gap: 8px;
+}
+
+.logo {
+  flex-shrink: 0;
 } 
