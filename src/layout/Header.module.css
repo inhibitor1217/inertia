@@ -1,0 +1,13 @@
+.container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 70px;
+  background-color: var(--bg-header);
+  border-bottom: 1px solid var(--bdr-black-light);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+}
