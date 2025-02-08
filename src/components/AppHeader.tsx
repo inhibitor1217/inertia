@@ -1,4 +1,4 @@
-import { HStack, Stack, Text } from "@channel.io/bezier-react"
+import { HStack, Text } from "@channel.io/bezier-react"
 import Image from "next/image"
 import Link from "next/link"
 
