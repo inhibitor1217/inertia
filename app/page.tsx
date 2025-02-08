@@ -1,8 +1,6 @@
-import Layout from "@/src/layout/Layout"
-
 export default function Home() {
   return (
-    <Layout>
+    <>
       <h1>Inertia</h1>
       {Array.from({ length: 20 }).map((_, i) => (
         <div key={i} style={{ padding: "20px" }}>
@@ -13,6 +11,6 @@ export default function Home() {
           </p>
         </div>
       ))}
-    </Layout>
+    </>
   )
 }

@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
-import Provider from "./provider";
-
 import "@channel.io/bezier-react/styles.css";
+
+import AppHeader from "@/src/components/AppHeader";
+import Layout from "@/src/layout/Layout";
+
+import Provider from "./provider";
 import "./global.css";
 
 export const metadata: Metadata = {
@@ -10,9 +13,9 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: {
+  children: React.ReactNode
+}) {
   return (
     <html>
       <head>
@@ -28,9 +31,11 @@ export default function RootLayout({
         />
       </head>
       <body>
-        <Provider>
-          {children}
-        </Provider>
+        <Layout Header={<AppHeader />}>
+          <Provider>
+            {children}
+          </Provider>
+        </Layout>
       </body>
     </html>
   )
