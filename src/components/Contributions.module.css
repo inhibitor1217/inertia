@@ -1,0 +1,57 @@
+.wrap {
+  padding: 8px;
+}
+
+.container {
+  padding: 8px 0;
+}
+
+.tableContainer {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.table {
+  width: max-content;
+  border-spacing: 3px;
+}
+
+.dayColumn {
+  position: relative;
+  width: 28px;
+  height: 10px;
+}
+
+.dayColumnLabel {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+}
+
+.dailyCommit {
+  width: 10px;
+  height: 10px;
+  border-radius: var(--radius-2);
+}
+
+.dailyCommit.level-0 {
+  background-color: var(--bg-grey-light);
+  border: 1px solid var(--bdr-black-light);
+}
+
+.dailyCommit.level-1 {
+  background-color: var(--bgtxt-teal-lighter);
+}
+
+.dailyCommit.level-2 {
+  background-color: var(--bgtxt-teal-light);
+}
+
+.dailyCommit.level-3 {
+  background-color: var(--bgtxt-teal-normal);
+}
+
+.dailyCommit.level-4 {
+  background-color: var(--bgtxt-teal-dark);
+}
