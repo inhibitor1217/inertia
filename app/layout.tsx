@@ -7,6 +7,7 @@ import Layout from "@/src/layout/Layout";
 
 import Provider from "./provider";
 import "./global.css";
+import InstallAppPrompt from "@/src/components/InstallAppPrompt";
 
 export const metadata: Metadata = {
   title: "Inertia",
@@ -31,14 +32,15 @@ export default function RootLayout({
         />
       </head>
       <body>
-        <Layout
-          Header={<AppHeader />}
-          Nav={<AppNav />}
-        >
-          <Provider>
+        <Provider>
+          <Layout
+            Header={<AppHeader />}
+            Nav={<AppNav />}
+            Overlay={<InstallAppPrompt />}
+          >
             {children}
-          </Provider>
-        </Layout>
+          </Layout>
+        </Provider>
       </body>
     </html>
   )

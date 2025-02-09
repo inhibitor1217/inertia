@@ -5,12 +5,14 @@ import Nav from "./Nav"
 export interface LayoutProps {
   Header?: React.ReactNode
   Nav?: React.ReactNode
+  Overlay?: React.ReactNode
   children?: React.ReactNode
 }
 
 export default function Layout({
   Header: header,
   Nav: nav,
+  Overlay,
   children,
 }: LayoutProps) {
   return (
@@ -18,7 +20,7 @@ export default function Layout({
       <Header>
         {header}
       </Header>
-      <Main>
+      <Main Overlay={Overlay}>
         {children}
       </Main>
       <Nav>
