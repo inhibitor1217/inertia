@@ -1,0 +1,10 @@
+.container {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 70px;
+  background-color: var(--bg-header);
+  border-top: 1px solid var(--bdr-black-light);
+  z-index: 100;
+}

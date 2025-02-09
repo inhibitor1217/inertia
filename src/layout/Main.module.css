@@ -1,7 +1,8 @@
 .container {
-  height: calc(100vh - 70px);  /* Fallback */
-  height: calc(100dvh - 70px);
+  height: calc(100vh - 140px);
+  height: calc(100dvh - 140px);
   margin-top: 70px;
+  margin-bottom: 70px;
   overflow-y: auto;
   background-color: var(--bg-black-lighter);
 }
