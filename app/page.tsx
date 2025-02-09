@@ -1,9 +1,9 @@
-import Contributions from "@/src/components/Contributions"
+import ContributionCalendar from "@/src/components/ContributionCalendar"
 
 export default function Home() {
   return (
     <>
-      <Contributions />
+      <ContributionCalendar />
     </>
   )
 }

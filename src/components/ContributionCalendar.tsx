@@ -3,11 +3,11 @@ import { Text, VStack } from "@channel.io/bezier-react";
 import classnames from "@/src/lib/classnames";
 
 import Card from "./Card";
-import styles from "./Contributions.module.css";
+import styles from "./ContributionCalendar.module.css";
 
 const THRESHOLDS = [0, 1, 5, 10, 30, Infinity]
 
-export default function Contributions() {
+export default function ContributionCalendar() {
   return (
     <div className={styles.wrap}>
       <Card>
@@ -16,7 +16,7 @@ export default function Contributions() {
             {"{N}"} commits in the last year
           </Text>
           <div className={styles.tableContainer}>
-            <ContributionsTable />
+            <CalendarTable />
           </div>
         </VStack>
       </Card>
@@ -88,11 +88,12 @@ function groupByMonths(weeks: Date[][]): [Date, number][] {
 
 const [DATES_BY_WEEKS, DATES_BY_DAYS] = weeksOfLastYear()
 const MONTHS = groupByMonths(DATES_BY_WEEKS)
-function ContributionsTable() {
+
+function CalendarTable() {
   return (
     <table className={styles.table}>
       <thead>
-        <ContributionsTableHeader />
+        <CalendarTableHeader />
       </thead>
       <tbody>
         {DATES_BY_DAYS.map((row, index) => (
@@ -106,7 +107,7 @@ function ContributionsTable() {
             </td>
 
             {row.map((date) => (
-              <DailyCommit
+              <CalendarTableCell
                 key={date.toISOString()}
                 amount={date.getDate()}
               />
@@ -118,7 +119,7 @@ function ContributionsTable() {
   )
 }
 
-function ContributionsTableHeader() {
+function CalendarTableHeader() {
   console.log(MONTHS)
   return (
     <tr>
@@ -134,7 +135,7 @@ function ContributionsTableHeader() {
   )
 }
 
-function DailyCommit({
+function CalendarTableCell({
   amount,
 }: {
   amount: number
