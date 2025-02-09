@@ -1,22 +1,58 @@
+"use client"
+
 import { Text, VStack } from "@channel.io/bezier-react";
+import { useLiveQuery } from "dexie-react-hooks";
+import React from "react"
 
 import classnames from "@/src/lib/classnames";
+import db, { type Commit } from "@/src/db/schema";
 
 import Card from "./Card";
 import styles from "./ContributionCalendar.module.css";
 
 const THRESHOLDS = [0, 1, 5, 10, 30, Infinity]
 
+const today = new Date()
+const thisWeekStart = startOfWeek(today)
+const lastYear = new Date(today.getFullYear() - 1, today.getMonth(), today.getDate())
+const lastYearStartOfWeek = startOfWeek(lastYear)
+
+function dateKey(date: Date): string {
+  return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`
+}
+
+function totalContributions(commits: Commit[] | undefined): number {
+  if (!commits) return 0
+  return commits.reduce((acc, commit) => acc + commit.contribution, 0)
+}
+
+function groupContributionsByDate(commits: Commit[] | undefined): Record<string, number> {
+  if (!commits) return {}
+  return commits.reduce((acc, commit) => {
+    const date = dateKey(commit.createdAt)
+    acc[date] = (acc[date] || 0) + commit.contribution
+    return acc
+  }, {} as Record<string, number>)
+}
+
 export default function ContributionCalendar() {
+  const commits = useLiveQuery<Commit[] | undefined>(() => db.commits
+    .where("createdAt")
+    .between(lastYearStartOfWeek, thisWeekStart)
+    .toArray()
+  )
+
+  const contributionsByDate = React.useMemo(() => groupContributionsByDate(commits), [commits])
+
   return (
     <div className={styles.wrap}>
       <Card>
         <VStack className={styles.container} spacing={8}>
           <Text as="h2" typo="14">
-            {"{N}"} commits in the last year
+            {totalContributions(commits)} commits in the last year
           </Text>
           <div className={styles.tableContainer}>
-            <CalendarTable />
+            <CalendarTable contributionsByDate={contributionsByDate} />
           </div>
         </VStack>
       </Card>
@@ -37,11 +73,6 @@ function addDays(date: Date, days: number) {
 }
 
 function weeksOfLastYear(): [Date[][], Date[][]] {
-  const today = new Date()
-  const thisWeekStart = startOfWeek(today)
-  const lastYear = new Date(today.getFullYear() - 1, today.getMonth(), today.getDate())
-  const lastYearStartOfWeek = startOfWeek(lastYear)
-
   const weeks = []
   
   for (let weekStart = lastYearStartOfWeek; weekStart < thisWeekStart; weekStart = addDays(weekStart, 7)) {
@@ -89,7 +120,11 @@ function groupByMonths(weeks: Date[][]): [Date, number][] {
 const [DATES_BY_WEEKS, DATES_BY_DAYS] = weeksOfLastYear()
 const MONTHS = groupByMonths(DATES_BY_WEEKS)
 
-function CalendarTable() {
+function CalendarTable({
+  contributionsByDate,
+}: {
+  contributionsByDate: Record<string, number>
+}) {
   return (
     <table className={styles.table}>
       <thead>
@@ -109,7 +144,7 @@ function CalendarTable() {
             {row.map((date) => (
               <CalendarTableCell
                 key={date.toISOString()}
-                amount={date.getDate()}
+                amount={contributionsByDate[dateKey(date)] || 0}
               />
             ))}
           </tr>
@@ -120,7 +155,6 @@ function CalendarTable() {
 }
 
 function CalendarTableHeader() {
-  console.log(MONTHS)
   return (
     <tr>
       <td />
