@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "@channel.io/bezier-react/styles.css";
 
 import AppHeader from "@/src/components/AppHeader";
+import AppNav from "@/src/components/AppNav";
 import Layout from "@/src/layout/Layout";
 
 import Provider from "./provider";
@@ -30,7 +31,10 @@ export default function RootLayout({
         />
       </head>
       <body>
-        <Layout Header={<AppHeader />}>
+        <Layout
+          Header={<AppHeader />}
+          Nav={<AppNav />}
+        >
           <Provider>
             {children}
           </Provider>
