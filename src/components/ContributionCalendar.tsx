@@ -38,10 +38,11 @@ function groupContributionsByDate(commits: Commit[] | undefined): Record<string,
 export default function ContributionCalendar() {
   const commits = useLiveQuery<Commit[] | undefined>(() => db.commits
     .where("createdAt")
-    .between(lastYearStartOfWeek(), thisWeekStart())
+    .aboveOrEqual(lastYearStartOfWeek())
     .toArray()
   )
 
+  const total = totalContributions(commits)
   const contributionsByDate = React.useMemo(() => groupContributionsByDate(commits), [commits])
 
   return (
@@ -49,7 +50,7 @@ export default function ContributionCalendar() {
       <Card>
         <VStack className={styles.container} spacing={8}>
           <Text as="h2" typo="14">
-            {totalContributions(commits)} commits in the last year
+            {total} {total === 1 ? "commit" : "commits"} in the last year
           </Text>
           <div className={styles.tableContainer}>
             <CalendarTable contributionsByDate={contributionsByDate} />

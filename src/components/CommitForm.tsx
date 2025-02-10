@@ -1,6 +1,6 @@
 "use client"
 
-import { HexahedronFilledIcon, HexahedronIcon } from "@channel.io/bezier-icons"
+import { HexahedronFilledIcon, HexahedronIcon, TrashIcon } from "@channel.io/bezier-icons"
 import { Button, ButtonGroup, ListItem, Select, SelectRef, Text, VStack } from "@channel.io/bezier-react"
 import { useLiveQuery } from "dexie-react-hooks"
 import React from "react"
@@ -52,7 +52,7 @@ export default function CommitForm() {
         <Card>
           <VStack>
             {/* TODO display speed dial for today's commit */}
-            <CommitButtonForm />
+            <CommitButtonForm selectedRepositoryId={selectedRepositoryId} />
           </VStack>
         </Card>
       </VStack>
@@ -102,8 +102,35 @@ function RepositorySelector({
   )
 }
 
-function CommitButtonForm() {
+function CommitButtonForm({
+  selectedRepositoryId,
+}: {
+  selectedRepositoryId: number | null
+}) {
   const [amount, setAmount] = React.useState(0)
+
+  const commit = async () => {
+    if (!selectedRepositoryId) return
+
+    await db.commits.add({
+      repositoryId: selectedRepositoryId,
+      createdAt: new Date(),
+      contribution: amount,
+    })
+
+    setAmount(0)
+  }
+
+  const resetToday = async () => {
+    if (!selectedRepositoryId) return
+
+    const today = new Date().toISOString().split("T")[0]
+    await db.commits
+      .where("repositoryId")
+      .equals(selectedRepositoryId)
+      .and(commit => commit.createdAt.toISOString().split("T")[0] === today)
+      .delete()
+  }
 
   return (
     <VStack align="stretch" spacing={8}>
@@ -119,7 +146,9 @@ function CommitButtonForm() {
         <Button className={styles.commitButton} colorVariant="green" styleVariant="secondary" text="+10" onClick={() => setAmount(x => x + 10)} />
       </ButtonGroup>
 
-      <Button colorVariant="green" styleVariant="primary" text="Commit" />
+      <Button colorVariant="green" styleVariant="primary" text="Commit" onClick={commit} />
+
+      <Button className={styles.resetButton} colorVariant="monochrome" styleVariant="tertiary" leftContent={TrashIcon} size="xs" text="Reset today" onClick={resetToday} />
     </VStack>
   )
 }
