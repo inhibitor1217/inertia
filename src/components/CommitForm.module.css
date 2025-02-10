@@ -1,0 +1,23 @@
+.wrap {
+  padding: 8px;
+}
+
+.container {
+  padding: 8px 0;
+}
+
+.repositorySelect {
+  width: 200px;
+}
+
+.repositorySelectDropdown {
+  padding: 6px;
+}
+
+.commitAmount {
+  text-align: center;
+}
+
+.commitButton {
+  flex: 1;
+}
