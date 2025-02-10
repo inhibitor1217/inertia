@@ -9,6 +9,7 @@ import db, { Repository } from "@/src/db/schema"
 
 import Card from "./Card"
 import styles from "./CommitForm.module.css"
+import { Gauge } from "./Gauge"
 
 export default function CommitForm() {
   const repositories = useLiveQuery<Repository[]>(() => db.repositories.toArray())
@@ -50,10 +51,11 @@ export default function CommitForm() {
         />
 
         <Card>
-          <VStack>
-            {/* TODO display speed dial for today's commit */}
-            <CommitButtonForm selectedRepositoryId={selectedRepositoryId} />
-          </VStack>
+          <TodayContributionSpeedDial selectedRepositoryId={selectedRepositoryId} />
+        </Card>
+
+        <Card>
+          <CommitButtonForm selectedRepositoryId={selectedRepositoryId} />
         </Card>
       </VStack>
     </div>
@@ -99,6 +101,37 @@ function RepositorySelector({
         ))}
       </div>
     </Select>
+  )
+}
+
+function TodayContributionSpeedDial({
+  selectedRepositoryId,
+}: {
+  selectedRepositoryId: number | null
+}) {
+  const todayContributions = useLiveQuery<number>(() => {
+    if (!selectedRepositoryId) return 0
+    const today = new Date().toISOString().split("T")[0]
+    return db.commits
+      .where("repositoryId")
+      .equals(selectedRepositoryId)
+      .and(commit => commit.createdAt.toISOString().split("T")[0] === today)
+      .toArray()
+      .then(commits => commits.reduce((acc, commit) => acc + commit.contribution, 0))
+  }, [selectedRepositoryId])
+
+  return (
+    <VStack className={styles.todayContributionContainer} align="center" justify="center">
+      <Text as="h2" className={styles.todayContribution} bold>
+        {todayContributions}
+      </Text>
+
+      <Text typo="16">
+        Today's contribution
+      </Text>
+
+      <Gauge value={todayContributions ?? 0} size={320} className={styles.todayContributionGauge} />
+    </VStack>
   )
 }
 

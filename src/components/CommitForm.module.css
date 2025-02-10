@@ -14,6 +14,22 @@
   padding: 6px;
 }
 
+.todayContributionContainer {
+  position: relative;
+  width: 100%;
+  min-height: 360px;
+}
+
+.todayContribution {
+  font-size: 96px;
+  line-height: 1.15;
+}
+
+.todayContributionGauge {
+  position: absolute;
+  margin: auto;
+}
+
 .commitAmount {
   text-align: center;
 }

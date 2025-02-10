@@ -10,7 +10,7 @@ import db, { type Commit } from "@/src/db/schema";
 import Card from "./Card";
 import styles from "./ContributionCalendar.module.css";
 
-const THRESHOLDS = [0, 1, 5, 10, 30, Infinity]
+const THRESHOLDS = [0, 1, 15, 45, 75, Infinity]
 
 const today = () => new Date()
 const thisWeekStart = () => startOfWeek(today())
