@@ -12,10 +12,10 @@ import styles from "./ContributionCalendar.module.css";
 
 const THRESHOLDS = [0, 1, 5, 10, 30, Infinity]
 
-const today = new Date()
-const thisWeekStart = startOfWeek(today)
-const lastYear = new Date(today.getFullYear() - 1, today.getMonth(), today.getDate())
-const lastYearStartOfWeek = startOfWeek(lastYear)
+const today = () => new Date()
+const thisWeekStart = () => startOfWeek(today())
+const lastYear = () => new Date(today().getFullYear() - 1, today().getMonth(), today().getDate())
+const lastYearStartOfWeek = () => startOfWeek(lastYear())
 
 function dateKey(date: Date): string {
   return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`
@@ -38,7 +38,7 @@ function groupContributionsByDate(commits: Commit[] | undefined): Record<string,
 export default function ContributionCalendar() {
   const commits = useLiveQuery<Commit[] | undefined>(() => db.commits
     .where("createdAt")
-    .between(lastYearStartOfWeek, thisWeekStart)
+    .between(lastYearStartOfWeek(), thisWeekStart())
     .toArray()
   )
 
@@ -75,11 +75,11 @@ function addDays(date: Date, days: number) {
 function weeksOfLastYear(): [Date[][], Date[][]] {
   const weeks = []
   
-  for (let weekStart = lastYearStartOfWeek; weekStart < thisWeekStart; weekStart = addDays(weekStart, 7)) {
+  for (let weekStart = lastYearStartOfWeek(); weekStart < thisWeekStart(); weekStart = addDays(weekStart, 7)) {
     const week = []
     for (let i = 0; i < 7; i++) {
       const date = addDays(weekStart, i)
-      if (date.getTime() < today.getTime()) {
+      if (date.getTime() < today().getTime()) {
         week.push(date)
       }
     }
@@ -117,21 +117,20 @@ function groupByMonths(weeks: Date[][]): [Date, number][] {
   return months
 }
 
-const [DATES_BY_WEEKS, DATES_BY_DAYS] = weeksOfLastYear()
-const MONTHS = groupByMonths(DATES_BY_WEEKS)
-
 function CalendarTable({
   contributionsByDate,
 }: {
   contributionsByDate: Record<string, number>
 }) {
+  const [, datesByDays] = React.useMemo(() => weeksOfLastYear(), [])
+
   return (
     <table className={styles.table}>
       <thead>
         <CalendarTableHeader />
       </thead>
       <tbody>
-        {DATES_BY_DAYS.map((row, index) => (
+        {datesByDays.map((row, index) => (
           <tr key={index}>
             <td className={styles.dayColumn}>
               {row[0].getDay() % 2 === 1 && (
@@ -155,10 +154,15 @@ function CalendarTable({
 }
 
 function CalendarTableHeader() {
+  const months = React.useMemo(() => {
+    const [datesByWeeks] = weeksOfLastYear()
+    return groupByMonths(datesByWeeks)
+  }, [])
+
   return (
     <tr>
       <td />
-      {MONTHS.map(([month, count]) => (
+      {months.map(([month, count]) => (
         <td key={month.toISOString()} colSpan={count}>
           <Text typo="11" as="span" color="txt-black-darkest">
             {month.toLocaleDateString('en-US', { month: 'short' })}
