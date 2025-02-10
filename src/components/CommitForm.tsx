@@ -127,7 +127,7 @@ function TodayContributionSpeedDial({
       </Text>
 
       <Text typo="16">
-        Today's contribution
+        Today&apos;s contribution
       </Text>
 
       <Gauge value={todayContributions ?? 0} size={320} className={styles.todayContributionGauge} />

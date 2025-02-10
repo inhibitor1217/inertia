@@ -13,8 +13,6 @@ export function Gauge({
   const endAngle = 300
   const totalAngle = endAngle - startAngle
   
-  const valueAngle = startAngle + (totalAngle * normalizedValue / 100)
-  
   const radius = size * 0.4
   const strokeWidth = size * 0.04
   
