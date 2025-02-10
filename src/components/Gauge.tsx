@@ -1,4 +1,4 @@
-export const Gauge = ({
+export function Gauge({
   className,
   value,
   size,
@@ -6,7 +6,7 @@ export const Gauge = ({
   className?: string
   value: number
   size: number
-}) => {
+}) {
   const normalizedValue = Math.min(100, Math.max(0, value))
   
   const startAngle = 60
