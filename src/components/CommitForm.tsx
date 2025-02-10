@@ -144,6 +144,7 @@ function CommitButtonForm({
 
   const commit = async () => {
     if (!selectedRepositoryId) return
+    if (amount === 0) return
 
     await db.commits.add({
       repositoryId: selectedRepositoryId,

@@ -49,6 +49,7 @@ export default function InstallAppPrompt() {
       target={main}
       position="top-center"
       marginY={-64}
+      enableClickOutside
       withTransition
     >
       <HStack
