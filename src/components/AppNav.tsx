@@ -1,6 +1,6 @@
 "use client"
 
-import { BezierIcon, HomeIcon, SettingsIcon, WingIcon } from "@channel.io/bezier-icons"
+import { BezierIcon, HomeIcon, WingIcon } from "@channel.io/bezier-icons"
 import { HStack, Icon, Text, VStack } from "@channel.io/bezier-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
@@ -14,7 +14,6 @@ export default function AppNav() {
     <HStack className={styles.navContainer}>
       <NavItem icon={HomeIcon} label="Home" href="/" />
       <NavItem icon={WingIcon} label="Commit" href="/commit" />
-      <NavItem icon={SettingsIcon} label="Settings" href="/settings" />
     </HStack>
   )
 }
